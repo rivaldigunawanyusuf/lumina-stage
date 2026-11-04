@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/*
+ * LuminaStage design tokens (Phase 2.5).
+ * Light = "Editorial Studio Paper", Dark = "Carbon Pro Darkroom".
+ * The base stays `color-scheme: light dark`; an inline <head> script pins
+ * `data-theme` on <html> before first paint (see src/app/layout.tsx).
+ * Tokens are `light-dark()` pairs so they follow the computed color-scheme.
+ */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Editorial Studio Paper (Light Theme - Default) */
+  --paper: #f7f6f2;
+  --surface: #ffffff;
+  --well: #efece6;
+  --ink: #121211;
+  --ink-2: #52514e;
+  --ink-3: #787671;
+  --line: rgba(18, 18, 17, 0.10);
+  --line-strong: rgba(18, 18, 17, 0.22);
+  --cta: #18181b;
+  --cta-ink: #ffffff;
+  --accent: #d95d39;
+  --lock: #166534;
+  --lock-bg: #dcfce7;
+  --dot: rgba(18, 18, 17, 0.13);
+
+  accent-color: var(--accent);
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Carbon Pro Darkroom (Dark Theme) */
+  --paper: #0b0b0c;
+  --surface: #141416;
+  --well: #1e1e22;
+  --ink: #f4f4f6;
+  --ink-2: #a1a1aa;
+  --ink-3: #71717a;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.20);
+  --cta: #f4f4f6;
+  --cta-ink: #0b0b0c;
+  --accent: #f59e0b;
+  --lock: #86efac;
+  --lock-bg: rgba(22, 101, 52, 0.28);
+  --dot: rgba(255, 255, 255, 0.075);
+
+  accent-color: var(--accent);
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-well: var(--well);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-cta: var(--cta);
+  --color-cta-ink: var(--cta-ink);
+  --color-accent: var(--accent);
+  --color-lock: var(--lock);
+  --color-lock-bg: var(--lock-bg);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.14);
+  --shadow-lift: 0 1px 2px rgba(0, 0, 0, 0.05), 0 24px 48px -24px rgba(0, 0, 0, 0.28);
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─────────────────── Shared utilities ─────────────────── */
+
+.dot-grid {
+  background-color: var(--well);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.hairline {
+  border-color: var(--line);
+}
+
+.glass {
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.micro-label {
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Decorative scroll reveal - progressive enhancement, no JS fallback */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes ls-reveal {
+      from {
+        opacity: 0;
+        translate: 0 28px;
+      }
+    }
+    .reveal {
+      animation: ls-reveal auto cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Native range sliders matched to the palette */
+input[type="range"].ls-range {
+  accent-color: var(--accent);
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Native popover (Engine HUD) entry/exit */
+[popover].ls-popover {
+  margin: 0;
+  inset: auto;
+  opacity: 0;
+  translate: 0 -4px;
+  transition:
+    opacity 0.16s ease-out,
+    translate 0.16s ease-out,
+    display 0.16s allow-discrete,
+    overlay 0.16s allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+    translate: 0 0;
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+  }
+}
+
+/* Studio canvas: isolate paint work of the scrollable well */
+.studio-well {
+  contain: layout paint;
+}
+
+/* ─────────────────── Flat SaaS Clean Canvas ─────────────────── */
+
+.hero-glow {
+  background: transparent;
+}
+:root[data-theme="dark"] .hero-glow {
+  background: transparent;
+}
+
+.emerald-glow-box {
+  box-shadow: var(--shadow-lift);
+}
+:root[data-theme="dark"] .emerald-glow-box {
+  box-shadow: var(--shadow-lift);
+}
+
+
+/* ─────────────────── Tactile Notebook & Studio Craft (Robin Theme) ─────────────────── */
+
+.cutting-mat {
+  background-color: var(--well);
+  background-image: 
+    linear-gradient(to right, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.notebook-sheet {
+  background-color: var(--paper);
+  background-image: 
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 31px,
+      color-mix(in srgb, var(--ink) 5%, transparent) 32px
+    );
+  background-size: 100% 32px;
+}
+
+.scotch-tape {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+:root[data-theme="dark"] .scotch-tape {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.polaroid-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+:root[data-theme="dark"] .polaroid-card {
+  box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.5);
+}
+

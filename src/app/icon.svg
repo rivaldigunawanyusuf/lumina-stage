@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Minimalist Premium Squircle Background -->
+  <rect width="512" height="512" rx="128" fill="#121211" />
+  
+  <!-- Architectural Studio Stage Pedestal -->
+  <path
+    d="M120 424 L392 424 L448 488 L64 488 Z"
+    fill="#FFFFFF"
+  />
+  
+  <!-- Minimalist Geometric Diamond Aperture (Lumina) -->
+  <path
+    d="M256 48 L440 232 L256 416 L72 232 Z"
+    stroke="#FFFFFF"
+    stroke-width="56"
+    stroke-linejoin="miter"
+  />
+</svg>
